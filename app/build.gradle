@@ -27,6 +27,10 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         vectorDrawables.useSupportLibrary = true
+        buildConfigField "String", "WEB_SERVICE_URL", "\"https://core-graphql.staging.waldo.photos/\""
+        buildConfigField "String", "AUTH_COOKIE", "\"__staging.waldo.auth__=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMmEyODQ4M2YtNWM2Yi00ZWU5LWE4YjUtYzFlMGU5NWUwYTY5Iiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdLCJpc3MiOiJ3YWxkbzpjb3JlIiwiZ3JhbnRzIjpbImFsYnVtczpkZWxldGU6KiIsImFsYnVtczpjcmVhdGU6KiIsImFsYnVtczplZGl0OioiLCJhbGJ1bXM6dmlldzoqIl0sImV4cCI6MTQ4MzI2OTc1OCwiaWF0IjoxNDgwNjc3NzU4fQ.d-vGjljZ_wrxoBhfoNSfKSRJvTsiwx4Br-Zyje_rb_Y\""
+        buildConfigField "String", "USER_AGENT", "\"Waldo Android Dominik's app\""
+
     }
     buildTypes {
         release {
