@@ -28,3 +28,5 @@ there should be of course some kind of disk caching using Sqlite or ORM based me
 
 ##Screen Shots
 ![alt tag](https://github.com/dominolog/waldo_photos/blob/master/device-2016-12-02-181620.jpg?raw=true) ![alt tag](https://github.com/dominolog/waldo_photos/blob/master/device-2016-12-02-181649.jpg?raw=true)
+
+![alt tag](https://github.com/dominolog/waldo_photos/blob/master/video.gif)
