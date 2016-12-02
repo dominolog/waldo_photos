@@ -2,7 +2,6 @@ package pl.cubesoft.waldophotos.fragment;
 
 import android.animation.LayoutTransition;
 import android.content.Context;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -15,9 +14,9 @@ import android.widget.RelativeLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import pl.cubesoft.waldophotos.core.ImageLoader;
 import pl.cubesoft.waldophotos.R;
 import pl.cubesoft.waldophotos.adapter.PhotoGridAdapter;
+import pl.cubesoft.waldophotos.core.ImageLoader;
 import pl.cubesoft.waldophotos.model.Model;
 import pl.cubesoft.waldophotos.model.dto.Album;
 import pl.cubesoft.waldophotos.view.EmptyRecyclerView;
@@ -78,35 +77,7 @@ public class PhotoGridFragment extends BaseFragment {
 
 
         container.setLayoutManager(layoutManager);
-        container.addItemDecoration(new RecyclerView.ItemDecoration() {
-            @Override
-            public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-                super.getItemOffsets(outRect, view, parent, state);
 
-                //your padding...
-                final int padding = 1;
-                final int itemPosition = parent.getChildAdapterPosition(view);
-                if (itemPosition == RecyclerView.NO_POSITION) {
-                    return;
-                }
-
-                final int itemCount = state.getItemCount();
-
-
-                if (itemPosition == 0) {
-                    outRect.set(padding, padding, 0, padding);
-                }
-
-                else if (itemCount > 0 && itemPosition == itemCount - 1) {
-                    outRect.set(0, padding, padding, padding);
-                }
-
-                else {
-                    outRect.set(padding, padding, padding, padding);
-                }
-
-            }
-        });
         adapter = new PhotoGridAdapter(getContext(), model, imageLoader, IMAGE_LOAD_TAG, COLUMN_COUNT);
         container.setAdapter(adapter);
 
