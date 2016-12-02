@@ -27,4 +27,5 @@ esisting adapter. The Model.java implements both API access and in memory cachin
 there should be of course some kind of disk caching using Sqlite or ORM based mechanism.
 
 ##Screen Shots
-https://github.com/dominolog/waldo_photos/blob/master/device-2016-12-02-181620.jpg?raw=true
+![alt tag](https://github.com/dominolog/waldo_photos/blob/master/device-2016-12-02-181620.jpg?raw=true)
+![alt tag](https://github.com/dominolog/waldo_photos/blob/master/device-2016-12-02-181649.jpg?raw=true)
