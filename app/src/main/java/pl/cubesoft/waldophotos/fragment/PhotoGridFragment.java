@@ -108,7 +108,7 @@ public class PhotoGridFragment extends BaseFragment {
 
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            refreshData(true, adapter.getItemCount() > 0 ? adapter.getItemCount() : NUM_ITEMS_TO_LOAD_PER_PAGE, 0);
+            refreshData(true, NUM_ITEMS_TO_LOAD_PER_PAGE, 0);
         });
 
         adapter.setOnItemClickListener((view1, position, id) -> {
@@ -117,9 +117,7 @@ public class PhotoGridFragment extends BaseFragment {
         });
 
 
-        adapter.setOnItemLongClickListener((view1, position, id) -> {
-            return onItemLongClick(view1, position, id);
-        });
+        adapter.setOnItemLongClickListener((view1, position, id) -> onItemLongClick(view1, position, id));
 
 
 
@@ -182,13 +180,7 @@ public class PhotoGridFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-
-
         imageLoader.resumeLoad(IMAGE_LOAD_TAG);
-
-
-
-
     }
 
     private void refreshData(boolean force, int limit, int offset) {
