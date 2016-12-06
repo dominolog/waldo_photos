@@ -54,6 +54,7 @@ public class PhotoGridFragment extends BaseFragment {
     private ImageLoader imageLoader;
     private Model model;
     private Album album;
+    private EndlessRecyclerViewScrollListener scrollListener;
     //private int currentPage = 0;
 
 
@@ -95,7 +96,7 @@ public class PhotoGridFragment extends BaseFragment {
 
         });
 
-        container.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+        container.addOnScrollListener(scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
 
             @Override
             public void onLoadMore(int page) {
@@ -107,7 +108,7 @@ public class PhotoGridFragment extends BaseFragment {
 
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            refreshData(true, NUM_ITEMS_TO_LOAD_PER_PAGE, 0);
+            refreshData(true, adapter.getItemCount() > 0 ? adapter.getItemCount() : NUM_ITEMS_TO_LOAD_PER_PAGE, 0);
         });
 
         adapter.setOnItemClickListener((view1, position, id) -> {
@@ -206,6 +207,8 @@ public class PhotoGridFragment extends BaseFragment {
 
                     adapter.setData(album);
                     this.album = album;
+                    scrollListener.setNumItems(album.getPhotos().size());
+                    scrollListener.setIsLoading(false);
                     listener.onLoadAlbum(album);
 
                     getActivity().supportInvalidateOptionsMenu();
@@ -215,7 +218,7 @@ public class PhotoGridFragment extends BaseFragment {
                 }, () -> {
 
                     setRefreshing(false);
-
+                    scrollListener.setIsLoading(false);
                 })
         );
     }
