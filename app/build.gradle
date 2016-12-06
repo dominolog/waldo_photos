@@ -82,6 +82,8 @@ dependencies {
     compile 'com.jakewharton:butterknife:8.2.1'
     apt 'com.jakewharton:butterknife-compiler:8.2.1'
 
+    compile 'com.commit451:PhotoView:1.2.5'
+
     def retrofitVersion = "2.1.0"
 
     compile "com.squareup.retrofit2:retrofit:$retrofitVersion"

@@ -12,13 +12,7 @@ public class Photo {
     String id;
     List<Url> urls;
 
-    public String getId() {
-        return id;
-    }
 
-    public List<Url> getUrls() {
-        return urls;
-    }
 
     @Override
     public int hashCode() {
@@ -36,5 +30,21 @@ public class Photo {
                 "id='" + id + '\'' +
                 ", urls=" + urls +
                 '}';
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setUrls(List<Url> urls) {
+        this.urls = urls;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public List<Url> getUrls() {
+        return urls;
     }
 }

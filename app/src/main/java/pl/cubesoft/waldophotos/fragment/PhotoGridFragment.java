@@ -4,6 +4,7 @@ import android.animation.LayoutTransition;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,8 @@ import android.widget.RelativeLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.cubesoft.waldophotos.R;
+import pl.cubesoft.waldophotos.activity.PhotoGridActivity;
+import pl.cubesoft.waldophotos.activity.PhotoPagerActivity;
 import pl.cubesoft.waldophotos.adapter.PhotoGridAdapter;
 import pl.cubesoft.waldophotos.core.ImageLoader;
 import pl.cubesoft.waldophotos.model.Model;
@@ -132,6 +135,7 @@ public class PhotoGridFragment extends BaseFragment {
 
     private void onItemClick(View view, int position, String id) {
         final int idx = container.getChildAdapterPosition(view);
+        ContextCompat.startActivity(getContext(), PhotoPagerActivity.createIntent(getContext(), albumId, position), null);
     }
 
     private boolean onItemLongClick(View view, int position, String id) {

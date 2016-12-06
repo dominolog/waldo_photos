@@ -20,9 +20,11 @@
         </activity>
 
         <activity android:name=".activity.PhotoGridActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"/>
 
-        </activity>
+
+        <activity android:name=".activity.PhotoPagerActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

@@ -22,6 +22,7 @@ import pl.cubesoft.waldophotos.model.dto.Album;
 import pl.cubesoft.waldophotos.model.dto.Photo;
 import pl.cubesoft.waldophotos.model.dto.Url;
 import pl.cubesoft.waldophotos.utils.DeviceInfo;
+import pl.cubesoft.waldophotos.utils.ImageUtils;
 
 
 public class PhotoGridAdapter extends RecyclerView.Adapter<PhotoGridAdapter.ViewHolder> {
@@ -118,18 +119,8 @@ public class PhotoGridAdapter extends RecyclerView.Adapter<PhotoGridAdapter.View
         final int cellWidth = screenWidth / columnCount;
 
         // get the best fit photos
-        Url url = null;
-        for (Url urlToCheck : item.getUrls()) {
-            if ( urlToCheck.getWidth() >= cellWidth ) {
-                url = urlToCheck;
-                break;
-            }
-        }
+        final Url url = ImageUtils.getBestFitImageUrl(cellWidth, item.getUrls());
 
-        // fallback
-        if (url == null) {
-            url = item.getUrls().get( item.getUrls().size() - 1);
-        }
 
         final int width = url.getWidth();
         final int height = url.getHeight();
@@ -137,9 +128,9 @@ public class PhotoGridAdapter extends RecyclerView.Adapter<PhotoGridAdapter.View
 
         //params.height = height * cellWidth / (width > 0 ? width : 1);
         params.width = params.height = cellWidth;
-        //holder.itemView.setLayoutParams(params);
+        holder.itemView.setLayoutParams(params);
 
-        imageLoader.loadImage(Uri.parse(url.getUrl()), holder.photo, tag);
+        imageLoader.loadImage(Uri.parse(url.getUrl()), holder.photo, tag, false, null);
 
 
         holder.itemView.setOnClickListener(view -> {
