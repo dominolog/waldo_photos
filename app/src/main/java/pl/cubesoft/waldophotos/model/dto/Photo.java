@@ -1,5 +1,6 @@
 package pl.cubesoft.waldophotos.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 
 import java.util.List;
@@ -7,7 +8,7 @@ import java.util.List;
 /**
  * Created by CUBESOFT on 02.12.2016.
  */
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Photo {
     String id;
     List<Url> urls;

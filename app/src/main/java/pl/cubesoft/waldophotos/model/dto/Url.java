@@ -1,9 +1,11 @@
 package pl.cubesoft.waldophotos.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Created by CUBESOFT on 02.12.2016.
  */
-
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Url {
     String size_code;
     String url;

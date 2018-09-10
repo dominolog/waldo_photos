@@ -1,34 +1,21 @@
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
-apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.neenbedankt.android-apt'
 
-buildscript {
-    repositories {
-
-        mavenCentral()
-
-    }
-    dependencies {
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-    }
-}
 
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    compileSdkVersion 27
     defaultConfig {
         applicationId "pl.cubesoft.waldophotos"
         minSdkVersion 15
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 3
         versionName "1.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         vectorDrawables.useSupportLibrary = true
-        buildConfigField "String", "WEB_SERVICE_URL", "\"https://core-graphql.staging.waldo.photos/\""
-        buildConfigField "String", "AUTH_COOKIE", "\"__staging.waldo.auth__=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiMmEyODQ4M2YtNWM2Yi00ZWU5LWE4YjUtYzFlMGU5NWUwYTY5Iiwicm9sZXMiOlsiYWRtaW5pc3RyYXRvciJdLCJpc3MiOiJ3YWxkbzpjb3JlIiwiZ3JhbnRzIjpbImFsYnVtczpkZWxldGU6KiIsImFsYnVtczpjcmVhdGU6KiIsImFsYnVtczplZGl0OioiLCJhbGJ1bXM6dmlldzoqIl0sImV4cCI6MTQ4MzI2OTc1OCwiaWF0IjoxNDgwNjc3NzU4fQ.d-vGjljZ_wrxoBhfoNSfKSRJvTsiwx4Br-Zyje_rb_Y\""
+        buildConfigField "String", "WEB_SERVICE_URL", "\"https://core-graphql.dev.waldo.photos/\""
+        buildConfigField "String", "AUTH_COOKIE", "\"__dev.waldo.auth__=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhY2NvdW50X2lkIjoiZjdkMWI5ZWYtYWE0Yi00YjY3LWFhZjQtYzYzZmE1MDYzOWM0Iiwicm9sZXMiOlsiY29uc3VtZXIiXSwiaXNzIjoid2FsZG86Y29yZSIsImdyYW50cyI6WyJhbGJ1bXM6dmlldzpwdWJsaWMiLCJhbGJ1bXM6ZWRpdDpvd25lZCIsImFsYnVtczpjcmVhdGU6cHJpdmF0ZSIsImFsYnVtczp2aWV3OmpvaW5lZCIsImFsYnVtczpkZWxldGU6b3duZWQiLCJhbGJ1bXM6Y3JlYXRlOnB1YmxpYyIsImFsYnVtczpjcmVhdGU6b3duZWQiLCJhbGJ1bXM6dmlldzpvd25lZCJdLCJleHAiOjE1MzkxNTc4NDUsImlhdCI6MTUzNjU2NTg0NX0.kFZQj2qGYWEazaGPOYJKhDK5ezFeytrLmOiT_F3Pjec\""
+
         buildConfigField "String", "USER_AGENT", "\"Waldo Android Dominik's app\""
 
     }
@@ -56,38 +43,38 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    def appCompatVersion = "25.0.1"
-    compile "com.android.support:appcompat-v7:$appCompatVersion"
-    compile "com.android.support:recyclerview-v7:$appCompatVersion"
-    compile "com.android.support:design:$appCompatVersion"
-    compile "com.android.support:cardview-v7:$appCompatVersion"
-    compile "com.android.support:preference-v7:$appCompatVersion"
-    testCompile 'junit:junit:4.12'
+    def appCompatVersion = "27.1.1"
+    implementation "com.android.support:appcompat-v7:$appCompatVersion"
+    implementation "com.android.support:recyclerview-v7:$appCompatVersion"
+    implementation "com.android.support:design:$appCompatVersion"
+    //implementation "com.android.support:cardview-v7:$appCompatVersion"
+    //implementation "com.android.support:preference-v7:$appCompatVersion"
+    testImplementation 'junit:junit:4.12'
 
 
-    compile 'ch.acra:acra:4.6.2'
-    compile 'com.squareup.picasso:picasso:2.6.0-SNAPSHOT'
-    compile 'com.squareup.okhttp3:okhttp:3.5.0'
+    implementation 'ch.acra:acra:4.6.2'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     //compile 'com.squareup.okhttp3:okhttp:3.4.1'
-    compile 'com.squareup.okhttp3:logging-interceptor:3.5.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
     //compile 'com.squareup.okhttp3:logging-interceptor:3.4.1'
-    compile 'io.reactivex:rxjava:1.1.7'
-    compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'com.annimon:stream:1.1.1'
-    compile 'com.jakewharton:butterknife:8.2.1'
-    apt 'com.jakewharton:butterknife-compiler:8.2.1'
+    implementation 'io.reactivex:rxjava:1.3.6'
+    implementation 'io.reactivex:rxandroid:1.2.1'
+    implementation 'com.annimon:stream:1.2.0'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
-    compile 'com.commit451:PhotoView:1.2.5'
+    implementation 'com.commit451:PhotoView:1.2.5'
 
     def retrofitVersion = "2.1.0"
 
-    compile "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    compile "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
-    compile "com.squareup.retrofit2:converter-jackson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-jackson:$retrofitVersion"
 
 }

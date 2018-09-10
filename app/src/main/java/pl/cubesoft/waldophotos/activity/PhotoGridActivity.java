@@ -30,8 +30,6 @@ public class PhotoGridActivity extends BaseActivity implements PhotoGridFragment
         setContentView(R.layout.activity_photo_grid);
         ButterKnife.bind(this);
 
-        setImmersiveMode(true);
-
         setSupportActionBar(toolbar);
         albumId = getIntent().getStringExtra(ARG_ALBUM_ID);
         if (savedInstanceState == null) {

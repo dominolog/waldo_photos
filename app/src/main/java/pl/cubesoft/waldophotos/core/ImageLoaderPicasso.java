@@ -40,7 +40,7 @@ public class ImageLoaderPicasso implements ImageLoader {
 				.centerInside()
 				.tag(tag);
 		if (skipCache) {
-			builder.skipMemoryCache();
+			//builder.ski();
 		}
 
 		builder.into(photo, new Callback() {
@@ -52,11 +52,13 @@ public class ImageLoaderPicasso implements ImageLoader {
 			}
 
 			@Override
-			public void onError() {
+			public void onError(Exception e) {
 				if (listener != null) {
 					listener.onImageLoadError();
 				}
 			}
+
+
 		});
 	}
 

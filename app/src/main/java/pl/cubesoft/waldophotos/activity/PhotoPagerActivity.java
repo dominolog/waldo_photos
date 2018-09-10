@@ -47,7 +47,6 @@ public class PhotoPagerActivity extends BaseActivity implements
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        setImmersiveMode(true);
         FragmentManager fm = getSupportFragmentManager();
         fragmentPhotoSetPager = (PhotoPagerFragment) fm.findFragmentById(R.id.container);
         if (savedInstanceState == null) {
