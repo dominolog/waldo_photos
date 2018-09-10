@@ -123,10 +123,12 @@ public class PhotoGridFragment extends BaseFragment {
         container.addOnScrollListener(scrollListener = new EndlessRecyclerViewScrollListener(layoutManager) {
 
             @Override
-            public void onLoadMore(int page) {
+            public void onLoadMore(int current_page) {
                 refreshData(false, NUM_ITEMS_TO_LOAD_PER_PAGE, adapter.getItemCount());
-
             }
+
+
+
         });
 
 

@@ -60,7 +60,7 @@ public class AlbumRepository {
 
         Album currentData = this.getData(id).getValue();
         if (currentData != null) {
-            if (currentData.getPhotos().size() < offset ) {
+            if (currentData.getPhotos().size() <= offset ) {
                 currentData.getPhotos().addAll(data.getAlbum().getPhotos());
             }
         } else {
