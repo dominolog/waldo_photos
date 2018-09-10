@@ -14,6 +14,8 @@ The application is written in Android Studio. It uses below libraries:
 * Picasso for robust image loading
 * RxJava for all background operations
 * ButterKnife 2.0 for view injections
+* Dagger 2.0 for DI
+* ViewModel from Google for MVVM
 
 ## Configuration
 In order to configure the app, edit **build.gradle** file and set below values:
