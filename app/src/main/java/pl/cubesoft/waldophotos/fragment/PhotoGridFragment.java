@@ -1,6 +1,7 @@
 package pl.cubesoft.waldophotos.fragment;
 
 import android.animation.LayoutTransition;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -13,19 +14,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.cubesoft.waldophotos.R;
-import pl.cubesoft.waldophotos.activity.PhotoGridActivity;
 import pl.cubesoft.waldophotos.activity.PhotoPagerActivity;
 import pl.cubesoft.waldophotos.adapter.PhotoGridAdapter;
 import pl.cubesoft.waldophotos.core.ImageLoader;
-import pl.cubesoft.waldophotos.model.Model;
 import pl.cubesoft.waldophotos.model.dto.Album;
 import pl.cubesoft.waldophotos.view.EmptyRecyclerView;
 import pl.cubesoft.waldophotos.view.EndlessRecyclerViewScrollListener;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import pl.cubesoft.waldophotos.viewmodel.AlbumRepository;
+import pl.cubesoft.waldophotos.viewmodel.AlbumViewModel;
+import pl.cubesoft.waldophotos.viewmodel.ViewModelFactory;
 
 
 public class PhotoGridFragment extends BaseFragment {
@@ -48,18 +50,37 @@ public class PhotoGridFragment extends BaseFragment {
     @BindView(R.id.empty)
     View emptyView;
 
+    @Inject
+    ImageLoader imageLoader;
+
+    @Inject
+    ViewModelFactory viewModelFactory;
 
 
 
 
     private String albumId;
     private OnPhotoGridFragmentInteractionListener listener;
-    private ImageLoader imageLoader;
-    private Model model;
+
+
     private Album album;
     private EndlessRecyclerViewScrollListener scrollListener;
+    private AlbumViewModel model;
     //private int currentPage = 0;
 
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        getMyApplication().getAppComponent().inject(this);
+
+
+
+
+        albumId = getArguments().getString(ARG_ALBUM_ID);
+
+        setHasOptionsMenu(true);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,7 +103,7 @@ public class PhotoGridFragment extends BaseFragment {
 
         container.setLayoutManager(layoutManager);
 
-        adapter = new PhotoGridAdapter(getContext(), model, imageLoader, IMAGE_LOAD_TAG, COLUMN_COUNT);
+        adapter = new PhotoGridAdapter(getContext(), imageLoader, IMAGE_LOAD_TAG, COLUMN_COUNT);
         container.setAdapter(adapter);
 
         container.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -130,8 +151,14 @@ public class PhotoGridFragment extends BaseFragment {
         }
 
 
+        model = ViewModelProviders.of(this, viewModelFactory).get(AlbumViewModel.class);
+        model.getData(albumId).observe(this, this::setData);
+        model.getState(albumId).observe(this, this::setState);
+
         refreshData(false, NUM_ITEMS_TO_LOAD_PER_PAGE, adapter.getItemCount());
     }
+
+
 
     private void onItemClick(View view, int position, String id) {
         final int idx = container.getChildAdapterPosition(view);
@@ -157,15 +184,6 @@ public class PhotoGridFragment extends BaseFragment {
     }
 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        albumId = getArguments().getString(ARG_ALBUM_ID);
-
-        setHasOptionsMenu(true);
-
-
-    }
 
     @Override
     public void onSaveInstanceState(Bundle state) {
@@ -193,6 +211,11 @@ public class PhotoGridFragment extends BaseFragment {
 
     }
 
+    private void loadAlbum(boolean force, String albumId, int limit, int offset) {
+        model.loadData(albumId, limit, offset);
+    }
+
+    /*
 
     private void loadAlbum(boolean force, String albumId, int limit, int offset) {
         subscribe(model.loadAlbum(force, albumId, limit, offset)
@@ -201,13 +224,8 @@ public class PhotoGridFragment extends BaseFragment {
                 .doOnSubscribe(() -> setRefreshing(true))
                 .subscribe(album -> {
 
-                    adapter.setData(album);
-                    this.album = album;
-                    scrollListener.setNumItems(album.getPhotos().size());
-                    scrollListener.setIsLoading(false);
-                    listener.onLoadAlbum(album);
+                    setData(album);
 
-                    getActivity().supportInvalidateOptionsMenu();
                 }, throwable -> {
                     setRefreshing(false);
                     showSnackBar(android.R.id.content, R.string.error_while_loading_album);
@@ -219,7 +237,7 @@ public class PhotoGridFragment extends BaseFragment {
         );
     }
 
-
+*/
 
 
     @Override
@@ -227,12 +245,6 @@ public class PhotoGridFragment extends BaseFragment {
         super.onAttach(context);
         if (context instanceof OnPhotoGridFragmentInteractionListener) {
             listener = (OnPhotoGridFragmentInteractionListener) context;
-
-            imageLoader = listener.getImageLoader();
-            model = listener.getModel();
-
-
-
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnPhotoSetFragmentInteractionListener");
@@ -258,18 +270,35 @@ public class PhotoGridFragment extends BaseFragment {
         swipeRefreshLayout.post(() -> swipeRefreshLayout.setRefreshing(refreshing));
     }
 
+    public void setData(Album album) {
+        adapter.setData(album);
+        this.album = album;
+        scrollListener.setNumItems(album.getPhotos().size());
+        scrollListener.setIsLoading(false);
+        listener.onLoadAlbum(album);
 
+        getActivity().supportInvalidateOptionsMenu();
+    }
 
+    private void setState(AlbumRepository.State state) {
+        switch(state) {
+            case LOADING:
+                setRefreshing(true);
+                break;
 
+            case LOADED:
+                setRefreshing(false);
+                break;
+
+            case LOAD_ERROR:
+                setRefreshing(false);
+                showSnackBar(R.id.coordinator, R.string.error_loading_album);
+                break;
+        }
+    }
 
     public interface OnPhotoGridFragmentInteractionListener {
-        ImageLoader getImageLoader();
-
-        Model getModel();
-
         void onLoadAlbum(Album album);
-
-
     }
 
 }

@@ -1,9 +1,9 @@
 package pl.cubesoft.waldophotos.api;
 
+import io.reactivex.Observable;
 import pl.cubesoft.waldophotos.model.dto.AlbumResponse;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Created by CUBESOFT on 02.12.2016.

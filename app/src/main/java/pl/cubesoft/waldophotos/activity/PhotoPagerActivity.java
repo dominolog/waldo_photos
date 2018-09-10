@@ -12,10 +12,8 @@ import android.view.MenuItem;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.cubesoft.waldophotos.R;
-import pl.cubesoft.waldophotos.core.ImageLoader;
 import pl.cubesoft.waldophotos.fragment.PhotoPagerFragment;
 import pl.cubesoft.waldophotos.fragment.PhotoPagerItemFragment;
-import pl.cubesoft.waldophotos.model.Model;
 import pl.cubesoft.waldophotos.model.dto.Album;
 import pl.cubesoft.waldophotos.utils.TextUtils;
 
@@ -102,15 +100,8 @@ public class PhotoPagerActivity extends BaseActivity implements
         getSupportActionBar().setSubtitle(String.format("%d/%d", pagePosition+1, totalPages));
     }
 
-    @Override
-    public ImageLoader getImageLoader() {
-        return getWaldoApplication().provideImageLoader();
-    }
 
-    @Override
-    public Model getModel() {
-        return getWaldoApplication().provideModel();
-    }
+
 
 
 

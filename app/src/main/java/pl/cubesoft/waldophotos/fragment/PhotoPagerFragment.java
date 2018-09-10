@@ -1,5 +1,6 @@
 package pl.cubesoft.waldophotos.fragment;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,16 +11,20 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import pl.cubesoft.waldophotos.R;
 import pl.cubesoft.waldophotos.adapter.PhotoPagerAdapter;
 import pl.cubesoft.waldophotos.core.ImageLoader;
-import pl.cubesoft.waldophotos.model.Model;
 import pl.cubesoft.waldophotos.model.dto.Album;
 import pl.cubesoft.waldophotos.model.dto.Photo;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import pl.cubesoft.waldophotos.viewmodel.AlbumRepository;
+import pl.cubesoft.waldophotos.viewmodel.AlbumViewModel;
+import pl.cubesoft.waldophotos.viewmodel.ViewModelFactory;
 
 
 public class PhotoPagerFragment extends BaseFragment {
@@ -41,15 +46,20 @@ public class PhotoPagerFragment extends BaseFragment {
     View emptyView;
 
 
-    private Model model;
-    private ImageLoader imageLoader;
+    @Inject
+    ImageLoader imageLoader;
+
+    @Inject
+    ViewModelFactory viewModelFactory;
+
+
     private PhotoPagerAdapter adapter;
     private Integer position;
     private String albumId;
     private List<Photo> items;
     private ViewPager.OnPageChangeListener pagerChangeListener;
     private Photo currentPhoto;
-
+    private AlbumViewModel model;
 
 
     /**
@@ -59,9 +69,6 @@ public class PhotoPagerFragment extends BaseFragment {
     public PhotoPagerFragment() {
     }
 
-    public void updateView() {
-        refreshData(true);
-    }
 
     public static int getPagerPositionFromBundle(Intent data) {
         return data.getIntExtra(RESULT_PAGER_POSITION, -1);
@@ -92,7 +99,7 @@ public class PhotoPagerFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getMyApplication().getAppComponent().inject(this);
         if (getArguments() != null) {
             position = getArguments().getInt(ARG_POSITION);
             albumId = getArguments().getString(ARG_ALBUM_ID);
@@ -135,7 +142,14 @@ public class PhotoPagerFragment extends BaseFragment {
             }
         });
 
+        model = ViewModelProviders.of(this, viewModelFactory).get(AlbumViewModel.class);
+        model.getData(albumId).observe(this, this::setData);
+        model.getState(albumId).observe(this, this::setState);
 
+
+    }
+
+    private void setState(AlbumRepository.State state) {
     }
 
     private void onPhotoSelected(Photo photo) {
@@ -155,9 +169,6 @@ public class PhotoPagerFragment extends BaseFragment {
         if (context instanceof OnPhotoPagerFragmentInteractionListener) {
             listener = (OnPhotoPagerFragmentInteractionListener) context;
 
-            imageLoader = listener.getImageLoader();
-            model = listener.getModel();
-
         } else {
             throw new RuntimeException(context.toString()
                     + " must implement OnListFragmentInteractionListener");
@@ -173,10 +184,7 @@ public class PhotoPagerFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        refreshData(false);
         imageLoader.resumeLoad(IMAGE_LOAD_TAG);
-
-
     }
 
     @Override
@@ -194,26 +202,6 @@ public class PhotoPagerFragment extends BaseFragment {
 
         imageLoader.cancelLoad(IMAGE_LOAD_TAG);
 
-    }
-
-
-    private void refreshData(boolean force) {
-        loadAlbum(force, albumId);
-
-    }
-
-
-    private void loadAlbum(boolean force, String albumId) {
-        subscribe(model.loadAlbum(force, albumId, NUM_ITEMS_TO_LOAD_PER_PAGE, 0)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(album -> {
-                    setData(album);
-                    listener.onLoadAlbum(album);
-                }, throwable -> {
-                    showSnackBar(android.R.id.content, R.string.error_while_loading_album);
-                })
-        );
     }
 
 
@@ -240,14 +228,7 @@ public class PhotoPagerFragment extends BaseFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnPhotoPagerFragmentInteractionListener {
-
         void onPagerItemChanged(int pagePosition, int totalPages);
-
-        ImageLoader getImageLoader();
-
-        Model getModel();
-
-
         void onLoadAlbum(Album album);
     }
 }

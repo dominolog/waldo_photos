@@ -17,7 +17,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.cubesoft.waldophotos.R;
 import pl.cubesoft.waldophotos.core.ImageLoader;
-import pl.cubesoft.waldophotos.model.Model;
 import pl.cubesoft.waldophotos.model.dto.Album;
 import pl.cubesoft.waldophotos.model.dto.Photo;
 import pl.cubesoft.waldophotos.model.dto.Url;
@@ -28,7 +27,6 @@ import pl.cubesoft.waldophotos.utils.ImageUtils;
 public class PhotoGridAdapter extends RecyclerView.Adapter<PhotoGridAdapter.ViewHolder> {
 
 
-    private final Model model;
     private final int columnCount;
     private final int cellWidth;
     private final int cellHeight;
@@ -90,8 +88,7 @@ public class PhotoGridAdapter extends RecyclerView.Adapter<PhotoGridAdapter.View
 
     //private Set<Integer> mSelectedItemSet = new HashSet<Integer>();
 
-    public PhotoGridAdapter(Context context, Model model, ImageLoader imageLoader, Object tag, int columnCount) {
-        this.model = model;
+    public PhotoGridAdapter(Context context, ImageLoader imageLoader, Object tag, int columnCount) {
         this.imageLoader = imageLoader;
         this.tag = tag;
         this.columnCount = columnCount;

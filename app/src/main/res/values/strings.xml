@@ -6,4 +6,5 @@
     <string name="photo_item_animation">photo_item_animation</string>
     <string name="no_photos">No photos</string>
     <string name="there_are_not_photos_in_this_gallery">There are no photos in this album</string>
+    <string name="error_loading_album">Error while loading album!</string>
 </resources>

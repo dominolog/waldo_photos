@@ -1,23 +1,27 @@
 package pl.cubesoft.waldophotos.fragment;
 
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 
-import rx.Subscription;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import pl.cubesoft.waldophotos.activity.BaseActivity;
+import pl.cubesoft.waldophotos.app.WaldoApplication;
 
 /**
  * Created by CUBESOFT on 02.12.2016.
  */
 public class BaseFragment extends Fragment{
 
-    final CompositeSubscription compositeSubscription = new CompositeSubscription();
+    private final CompositeDisposable disposables = new CompositeDisposable();
 
-    protected void subscribe (Subscription subscription) {
-        compositeSubscription.add(subscription);
+
+    protected void subscribe (Disposable disposable) {
+        disposables.add(disposable);
     }
 
-    protected void unsubscribe (Subscription subscription) {
-        compositeSubscription.remove(subscription);
+    protected void unsubscribe (Disposable disposable) {
+        disposables.remove(disposable);
     }
 
 
@@ -31,11 +35,20 @@ public class BaseFragment extends Fragment{
     public void onDestroy() {
         super.onDestroy();
 
-        compositeSubscription.unsubscribe();
+        disposables.clear();
+    }
+
+    protected BaseActivity getMyActivity() {
+        return (BaseActivity) getActivity();
+    }
+
+    protected WaldoApplication getMyApplication() {
+        return (WaldoApplication) getActivity().getApplication();
     }
 
 
     protected void showSnackBar(int content, int message) {
+        Snackbar.make(getView(), message, Snackbar.LENGTH_SHORT).show();
     }
 
 }

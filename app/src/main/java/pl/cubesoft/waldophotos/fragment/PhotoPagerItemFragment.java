@@ -1,35 +1,26 @@
 package pl.cubesoft.waldophotos.fragment;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
 
-
-import java.util.ArrayList;
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import pl.cubesoft.waldophotos.R;
 import pl.cubesoft.waldophotos.core.ImageLoader;
-import pl.cubesoft.waldophotos.model.Model;
 import pl.cubesoft.waldophotos.model.dto.Photo;
 import pl.cubesoft.waldophotos.model.dto.Url;
 import pl.cubesoft.waldophotos.model.parcelable.ParcelablePhoto;
 import pl.cubesoft.waldophotos.utils.DeviceInfo;
 import pl.cubesoft.waldophotos.utils.ImageUtils;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import uk.co.senab.photoview.PhotoView;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
@@ -51,14 +42,9 @@ public class PhotoPagerItemFragment extends BaseFragment {
     @BindView(R.id.progressBar)
     ProgressBar progressBar;
 
+    @Inject
+    ImageLoader imageLoader;
 
-
-
-
-
-
-    private Model model;
-    private ImageLoader imageLoader;
     private Object imageLoadTag;
     private PhotoViewAttacher photoAttacher;
     private Photo data;
@@ -76,7 +62,7 @@ public class PhotoPagerItemFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        getMyApplication().getAppComponent().inject(this);
 
         if (getArguments() != null) {
             ParcelablePhoto parcelablePhoto = getArguments().getParcelable(ARG_PHOTO);
@@ -116,8 +102,6 @@ public class PhotoPagerItemFragment extends BaseFragment {
         if (context instanceof OnPhotoPagerItemFragmentInteractionListener) {
             listener = (OnPhotoPagerItemFragmentInteractionListener) context;
 
-            model = listener.getModel();
-            imageLoader = listener.getImageLoader();
 
         } else {
             throw new RuntimeException(context.toString()
@@ -208,7 +192,5 @@ public class PhotoPagerItemFragment extends BaseFragment {
 
     public interface OnPhotoPagerItemFragmentInteractionListener {
 
-        ImageLoader getImageLoader();
-        Model getModel();
     }
 }
